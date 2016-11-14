@@ -26,8 +26,8 @@
           <file leaf-file-name="sampleinput.txt" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/sampleinput.txt">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="0">
-                  <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+                <state relative-caret-position="240">
+                  <caret line="16" column="2" selection-start-line="16" selection-start-column="2" selection-end-line="16" selection-end-column="2" />
                   <folding />
                 </state>
               </provider>
@@ -66,19 +66,17 @@
           <file leaf-file-name="lab101.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/lab101.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1162">
-                  <caret line="285" column="9" selection-start-line="285" selection-start-column="9" selection-end-line="285" selection-end-column="9" />
+                <state relative-caret-position="3045">
+                  <caret line="302" column="8" selection-start-line="302" selection-start-column="8" selection-end-line="302" selection-end-column="8" />
                   <folding>
                     <element signature="e#59#68#0" expanded="true" />
                     <element signature="e#144#338#0" expanded="false" />
                     <element signature="e#365#619#0" expanded="false" />
                     <element signature="e#656#1415#0" expanded="false" />
                     <element signature="e#1450#1454#0" expanded="false" />
-                    <element signature="e#2285#2361#0" expanded="false" />
-                    <element signature="e#2391#2502#0" expanded="false" />
-                    <element signature="e#7278#7649#0" expanded="false" />
-                    <marker date="1479137788000" expanded="true" signature="8684:9244" ph="..." />
-                    <marker date="1479137788000" expanded="true" signature="9094:9180" ph="..." />
+                    <element signature="e#1650#1726#0" expanded="false" />
+                    <element signature="e#1756#2550#0" expanded="false" />
+                    <element signature="e#7912#8283#0" expanded="false" />
                   </folding>
                 </state>
               </provider>
@@ -91,7 +89,7 @@
           <file leaf-file-name="syntaxFuncs2.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/syntaxFuncs2.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="382">
+                <state relative-caret-position="2835">
                   <caret line="234" column="0" selection-start-line="234" selection-start-column="0" selection-end-line="237" selection-end-column="26" />
                   <folding>
                     <element signature="e#59#68#0" expanded="true" />
@@ -106,16 +104,16 @@
           <file leaf-file-name="lab101.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/lab101.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="829">
-                  <caret line="228" column="43" selection-start-line="228" selection-start-column="43" selection-end-line="228" selection-end-column="43" />
+                <state relative-caret-position="307">
+                  <caret line="246" column="0" selection-start-line="246" selection-start-column="0" selection-end-line="246" selection-end-column="0" />
                   <folding>
                     <element signature="e#59#68#0" expanded="true" />
                     <element signature="e#144#338#0" expanded="false" />
                     <element signature="e#365#619#0" expanded="false" />
                     <element signature="e#656#1415#0" expanded="false" />
                     <element signature="e#1450#1454#0" expanded="false" />
-                    <element signature="e#2152#2241#0" expanded="false" />
-                    <element signature="e#2285#2361#0" expanded="false" />
+                    <element signature="e#1650#1726#0" expanded="false" />
+                    <element signature="e#7912#8283#0" expanded="false" />
                   </folding>
                 </state>
               </provider>
@@ -124,7 +122,7 @@
           <file leaf-file-name="lab10.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/lab10.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-2726">
+                <state relative-caret-position="0">
                   <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
                   <folding />
                 </state>
@@ -193,9 +191,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -877,12 +875,13 @@
       <option name="presentableId" value="Default" />
       <updated>1478882065881</updated>
       <workItem from="1478882067227" duration="15028000" />
-      <workItem from="1479132259052" duration="4816000" />
+      <workItem from="1479132259052" duration="5007000" />
+      <workItem from="1479149340317" duration="2987000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19844000" />
+    <option name="totallyTimeSpent" value="23022000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="55" y="23" width="1890" height="1417" extended-state="0" />
@@ -894,8 +893,8 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="GhcMod" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -928,10 +927,81 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="2" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/sampleinput.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/samples/correct_sample.ans">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/samples/correct_sample.in">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="5" selection-start-line="0" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/samples/incorrect_sample.in">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="12" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/syntaxFuncs2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2835">
+          <caret line="234" column="0" selection-start-line="234" selection-start-column="0" selection-end-line="237" selection-end-column="26" />
+          <folding>
+            <element signature="e#59#68#0" expanded="true" />
+            <element signature="e#144#338#0" expanded="false" />
+            <element signature="e#365#619#0" expanded="false" />
+            <element signature="e#656#1386#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lab101.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3285">
+          <caret line="285" column="9" selection-start-line="285" selection-start-column="9" selection-end-line="285" selection-end-column="9" />
+          <folding>
+            <element signature="e#59#68#0" expanded="true" />
+            <element signature="e#144#338#0" expanded="false" />
+            <element signature="e#365#619#0" expanded="false" />
+            <element signature="e#656#1415#0" expanded="false" />
+            <element signature="e#1450#1454#0" expanded="false" />
+            <element signature="e#1650#1726#0" expanded="false" />
+            <element signature="e#7912#8283#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lab10.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/sampleinput.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
@@ -987,8 +1057,8 @@
             <element signature="e#365#619#0" expanded="false" />
             <element signature="e#656#1415#0" expanded="false" />
             <element signature="e#1450#1454#0" expanded="false" />
-            <element signature="e#2152#2241#0" expanded="false" />
-            <element signature="e#2285#2361#0" expanded="false" />
+            <element signature="e#1650#1726#0" expanded="false" />
+            <element signature="e#7912#8283#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1026,7 +1096,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lab10.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2726">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -1034,7 +1104,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/syntaxFuncs2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="382">
+        <state relative-caret-position="2835">
           <caret line="234" column="0" selection-start-line="234" selection-start-column="0" selection-end-line="237" selection-end-column="26" />
           <folding>
             <element signature="e#59#68#0" expanded="true" />
@@ -1047,24 +1117,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sampleinput.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="240">
+          <caret line="16" column="2" selection-start-line="16" selection-start-column="2" selection-end-line="16" selection-end-column="2" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lab101.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="829">
-          <caret line="228" column="43" selection-start-line="228" selection-start-column="43" selection-end-line="228" selection-end-column="43" />
+        <state relative-caret-position="307">
+          <caret line="246" column="0" selection-start-line="246" selection-start-column="0" selection-end-line="246" selection-end-column="0" />
           <folding>
             <element signature="e#59#68#0" expanded="true" />
             <element signature="e#144#338#0" expanded="false" />
             <element signature="e#365#619#0" expanded="false" />
             <element signature="e#656#1415#0" expanded="false" />
             <element signature="e#1450#1454#0" expanded="false" />
-            <element signature="e#2152#2241#0" expanded="false" />
-            <element signature="e#2285#2361#0" expanded="false" />
+            <element signature="e#1650#1726#0" expanded="false" />
+            <element signature="e#7912#8283#0" expanded="false" />
           </folding>
         </state>
       </provider>

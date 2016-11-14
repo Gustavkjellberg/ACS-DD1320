@@ -63,9 +63,11 @@ class LinkedQ:
 
 class Syntaxfel(Exception):
     pass
-atoms = ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne', 'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar', 'K', 'Ca', 'Sc', 'Ti', 'V', 'Cr', 'Mn', 'Fe', 'Co', 'Ni', 'Cu', 'Zn', 'Ga', 'Ge', 'As', 'Se', 'Br', 'Kr', 'Rb', 'Sr', 'Y', 'Zr', 'Nb', 'Mo', 'Tc', 'Ru', 'Rh', 'Pd', 'Ag', 'Cd', 'In', 'Sn', 'Sb', 'Te', 'I', 'Xe', 'Cs', 'Ba', 'La', 'Ce', 'Pr', 'Nd', 'Pm', 'Sm', 'Eu', 'Gd', 'Tb', 'Dy', 'Ho', 'Er', 'Tm', 'Yb', 'Lu', 'Hf', 'Ta', 'W', 'Re', 'Os', 'Ir', 'Pt', 'Au', 'Hg', 'Tl', 'Pb', 'Bi', 'Po', 'At', 'Rn', 'Fr', 'Ra', 'Ac', 'Th', 'Pa', 'U', 'Np', 'Pu', 'Am', 'Cm', 'Bk', 'Cf', 'Es', 'Fm', 'Md', 'No', 'Lr', 'Rf', 'Db', 'Sg', 'Bh', 'Hs', 'Mt', 'Ds', 'Rg', 'Cn', 'Fl', 'Lv']
+
 def qRest(q):
-    x = ' vid radslutet '
+    x = ' vid radslutet'
+    if not q.isEmpty():
+        x = x + ' '
     while not q.isEmpty():
         x = x + q.dequeue()
     return x
@@ -78,12 +80,27 @@ def createQueue(molecule):
     return q
 
 def checkAtom(atom, q):
+    atoms = ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne', 'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar', 'K', 'Ca', 'Sc', 'Ti', 'V', 'Cr', 'Mn', 'Fe', 'Co', 'Ni', 'Cu', 'Zn', 'Ga', 'Ge', 'As', 'Se', 'Br', 'Kr', 'Rb', 'Sr', 'Y', 'Zr', 'Nb', 'Mo', 'Tc', 'Ru', 'Rh', 'Pd', 'Ag', 'Cd', 'In', 'Sn', 'Sb', 'Te', 'I', 'Xe', 'Cs', 'Ba', 'La', 'Ce', 'Pr', 'Nd', 'Pm', 'Sm', 'Eu', 'Gd', 'Tb', 'Dy', 'Ho', 'Er', 'Tm', 'Yb', 'Lu', 'Hf', 'Ta', 'W', 'Re', 'Os', 'Ir', 'Pt', 'Au', 'Hg', 'Tl', 'Pb', 'Bi', 'Po', 'At', 'Rn', 'Fr', 'Ra', 'Ac', 'Th', 'Pa', 'U', 'Np', 'Pu', 'Am', 'Cm', 'Bk', 'Cf', 'Es', 'Fm', 'Md', 'No', 'Lr', 'Rf', 'Db', 'Sg', 'Bh', 'Hs', 'Mt', 'Ds', 'Rg', 'Cn', 'Fl', 'Lv']
     if atom in atoms:
         return
     else:
         q.dequeue()
         raise Syntaxfel('Okänd atom' + qRest(q))
 
+
+def checkNumber(q, letter, upperCase, lowerCase, number29, number19, number09):
+    num = q.dequeue()
+    if number19.match(num):
+        if q.peek():
+            if number09.match(q.peek()):
+                return numIterator(q, number09)
+            else:
+                if number29.match(num):
+                    return
+        else:
+            if number29.match(num):
+                return
+    raise Syntaxfel("För litet tal" + qRest(q))
 
 def nextSignInside(q, letter, upperCase, lowerCase, number29, number19, number09):
     if q.peek():
@@ -103,12 +120,16 @@ def readFormel(q, letter, upperCase, lowerCase, number29, number19, number09):
     #om det är en boktav
     if q.peek():
         if letter.match(q.peek()):
-            return readMol(q, letter, upperCase, lowerCase, number29, number19, number09)
+            readMol(q, letter, upperCase, lowerCase, number29, number19, number09)
+            return readFormel(q, letter, upperCase, lowerCase, number29, number19, number09)
         #om parentes (
         elif q.peek() == '(':
             q.dequeue()
-            readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
-            readFormel(q, letter, upperCase, lowerCase, number29, number19, number09)
+            if q.peek() == ')':
+                readFormel(q, letter, upperCase, lowerCase, number29, number19, number09)
+            else:
+                readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
+                return readFormel(q, letter, upperCase, lowerCase, number29, number19, number09)
         else:
             raise Syntaxfel('Felaktig gruppstart' + qRest(q))
     return
@@ -133,7 +154,6 @@ def readMol(q, letter, upperCase, lowerCase, number29, number19, number09):
 
 
 def readMolInside(q, letter, upperCase, lowerCase, number29, number19, number09):
-
     if upperCase.match(q.peek()):
         firstLetter = q.dequeue()
         if q.peek():
@@ -147,32 +167,12 @@ def readMolInside(q, letter, upperCase, lowerCase, number29, number19, number09)
         else:
             checkAtom(firstLetter, q)
             return nextSignInside(q, letter, upperCase, lowerCase, number29, number19, number09)
-
-
-
-
-    #om siffra kolla att den är stor nog
-
-def checkNumber(q, letter, upperCase, lowerCase, number29, number19, number09):
-    num = q.dequeue()
-    if number19.match(num):
-        if q.peek():
-            if number09.match(q.peek()):
-                return numIterator(q, number09)
-            else:
-                if number29.match(num):
-                    return
-        else:
-            if number29.match(num):
-                return
-    raise Syntaxfel("För litet tal" + qRest(q))
-
-
-def checkNumberAfterP(q, letter, upperCase, lowerCase, number29, number19, number09):
-    if number09.match(q.peek()):
-        checkNumber(q, letter, upperCase, lowerCase, number29, number19, number09)
     else:
-        raise Syntaxfel('Saknad siffra' + qRest(q))
+        raise Syntaxfel('Saknad stor bokstav' + qRest(q))
+
+
+
+
 
 def numIterator(q, number09):
     if q.peek():
@@ -184,6 +184,18 @@ def numIterator(q, number09):
     else:
         return
 
+
+    #om siffra kolla att den är stor nog
+
+
+
+
+def checkNumberAfterP(q, letter, upperCase, lowerCase, number29, number19, number09):
+    if number09.match(q.peek()):
+        return checkNumber(q, letter, upperCase, lowerCase, number29, number19, number09)
+    else:
+        raise Syntaxfel('Saknad siffra' + qRest(q))
+
 def readGroup(q, letter, upperCase, lowerCase, number29, number19, number09):
     #sålänge det finns ngt i kön och ingen ) har kommit forsätt, blir kön tom skriv sknad höger
     #om det kommer ( anropa read group) igen
@@ -191,8 +203,12 @@ def readGroup(q, letter, upperCase, lowerCase, number29, number19, number09):
     while q.peek() is not None:
         if q.peek() == "(":
             q.dequeue()
-            readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
-            return readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
+            if upperCase.match(q.peek()):
+                #readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
+                readMolInside(q, letter, upperCase, lowerCase, number29, number19, number09)
+                return readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
+            else:
+                readFormel(q, letter, upperCase, lowerCase, number29, number19, number09)
         elif q.peek() == ")":
             q.dequeue()
             if q.peek():
@@ -200,7 +216,8 @@ def readGroup(q, letter, upperCase, lowerCase, number29, number19, number09):
             else:
                 return
             #readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
-        elif upperCase.match(q.peek()):
+        #elif upperCase.match(q.peek()):
+        else:
             return readMolInside(q, letter, upperCase, lowerCase, number29, number19, number09)
     if q.isEmpty():
         raise Syntaxfel("Saknad högerparentes" + qRest(q))
@@ -226,7 +243,7 @@ class TestStringMethods(unittest.TestCase):
     def test_main(self):
         inp = "Na"
         #self.assertEqual(main3("Na"), "print")
-        self.assertEqual(main3(inp), "hej")
+        self.assertEqual(main3('inp'), 'Formeln är syntaktiskt korrekt')
 
 
 
@@ -283,5 +300,5 @@ def main():
 
 #Här körs programmet
 if __name__ == "__main__":
-    #main2()
-    unittest.main()
+    main2()
+    #unittest.main()
