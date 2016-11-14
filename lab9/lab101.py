@@ -51,6 +51,7 @@ class LinkedQ:
             self.length -= 1
             return out
     def peek(self):
+        # type: () -> object
         if not self.isEmpty():
             return self.first.getNum()
         else:
@@ -63,7 +64,7 @@ class Syntaxfel(Exception):
     pass
 atoms = ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne', 'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar', 'K', 'Ca', 'Sc', 'Ti', 'V', 'Cr', 'Mn', 'Fe', 'Co', 'Ni', 'Cu', 'Zn', 'Ga', 'Ge', 'As', 'Se', 'Br', 'Kr', 'Rb', 'Sr', 'Y', 'Zr', 'Nb', 'Mo', 'Tc', 'Ru', 'Rh', 'Pd', 'Ag', 'Cd', 'In', 'Sn', 'Sb', 'Te', 'I', 'Xe', 'Cs', 'Ba', 'La', 'Ce', 'Pr', 'Nd', 'Pm', 'Sm', 'Eu', 'Gd', 'Tb', 'Dy', 'Ho', 'Er', 'Tm', 'Yb', 'Lu', 'Hf', 'Ta', 'W', 'Re', 'Os', 'Ir', 'Pt', 'Au', 'Hg', 'Tl', 'Pb', 'Bi', 'Po', 'At', 'Rn', 'Fr', 'Ra', 'Ac', 'Th', 'Pa', 'U', 'Np', 'Pu', 'Am', 'Cm', 'Bk', 'Cf', 'Es', 'Fm', 'Md', 'No', 'Lr', 'Rf', 'Db', 'Sg', 'Bh', 'Hs', 'Mt', 'Ds', 'Rg', 'Cn', 'Fl', 'Lv']
 def qRest(q):
-    x = " vid radlutet "
+    x = " vid radslutet "
     while not q.isEmpty():
         x = x + q.dequeue()
     return x
@@ -91,51 +92,90 @@ def createQueue(molecule):
 def readFormel(q, letter, upperCase, lowerCase, number29, number19, number09):
     #om det är en boktav
     if q.peek():
-        if upperCase.match(q.peek()):
-            readMol(q, letter, upperCase, lowerCase, number29, number19, number09)
+        if letter.match(q.peek()):
+            return readMol(q, letter, upperCase, lowerCase, number29, number19, number09)
         #om parentes (
         elif q.peek() == '(':
+            q.dequeue()
             readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
-        #siffra
+            readFormel(q, letter, upperCase, lowerCase, number29, number19, number09)
         else:
-            raise Syntaxfel("Felaktig gruppstart")
+            raise Syntaxfel("Felaktig gruppstart" + qRest(q))
     return
 
 def readMol(q, letter, upperCase, lowerCase, number29, number19, number09):
-    firstLetter = q.dequeue()
-    if upperCase.match(firstLetter):
+    if upperCase.match(q.peek()):
+        firstLetter = q.dequeue()
         if q.peek():
             if letter.match(q.peek()):
                 if lowerCase.match(q.peek()):
-                    #atom = firstLetter + q.peek()
-                    checkAtom(firstLetter + q.peek())
+                    checkAtom(firstLetter + q.peek(), q)
                     q.dequeue()
                     nextSign(q, letter, upperCase, lowerCase, number29, number19, number09)
-            checkAtom(firstLetter)
+            checkAtom(firstLetter, q)
             nextSign(q, letter, upperCase, lowerCase, number29, number19, number09)
 
         else:
-            checkAtom(firstLetter)
-            return
+            checkAtom(firstLetter, q)
+            readFormel(q, letter, upperCase, lowerCase, number29, number19, number09)
     else:
-        raise Syntaxfel('Saknad stor bokstav')
+        raise Syntaxfel('Saknad stor bokstav' + qRest(q))
 
+
+def readMolInside(q, letter, upperCase, lowerCase, number29, number19, number09):
+
+    if upperCase.match(q.peek()):
+        firstLetter = q.dequeue()
+        if q.peek():
+            if letter.match(q.peek()):
+                if lowerCase.match(q.peek()):
+                    checkAtom(firstLetter + q.peek(), q)
+                    q.dequeue()
+                    return nextSignInside(q, letter, upperCase, lowerCase, number29, number19, number09)
+            checkAtom(firstLetter, q)
+            return nextSignInside(q, letter, upperCase, lowerCase, number29, number19, number09)
+        else:
+            checkAtom(firstLetter, q)
+            return nextSignInside(q, letter, upperCase, lowerCase, number29, number19, number09)
+
+
+def nextSignInside(q, letter, upperCase, lowerCase, number29, number19, number09):
+    if q.peek():
+        if number09.match(q.peek()):
+            checkNumber(q, letter, upperCase, lowerCase, number29, number19, number09)
+    return readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
 
 def nextSign(q, letter, upperCase, lowerCase, number29, number19, number09):
     if q.peek():
         if number09.match(q.peek()):
             checkNumber(q, letter, upperCase, lowerCase, number29, number19, number09)
-        readFormel(q, letter, upperCase, lowerCase, number29, number19, number09)
+        return readFormel(q, letter, upperCase, lowerCase, number29, number19, number09)
     else:
         return
 
     #om siffra kolla att den är stor nog
+
 def checkNumber(q, letter, upperCase, lowerCase, number29, number19, number09):
-    if number19.match(q.peek()):
-        q.dequeue()
-        numIterator(q, number09)
+    num = q.dequeue()
+    if number19.match(num):
+        if q.peek():
+            if number09.match(q.peek()):
+                return numIterator(q, number09)
+            else:
+                if number29.match(num):
+                    return
+        else:
+            if number29.match(num):
+                return
+    raise Syntaxfel("För litet tal" + qRest(q))
+
+
+def checkNumberAfterP(q, letter, upperCase, lowerCase, number29, number19, number09):
+    if number09.match(q.peek()):
+        checkNumber(q, letter, upperCase, lowerCase, number29, number19, number09)
     else:
-        raise Syntaxfel("För litet tal")
+        raise Syntaxfel('Saknad siffra' + qRest(q))
+
 def numIterator(q, number09):
     if q.peek():
         if number09.match(q.peek()):
@@ -146,17 +186,33 @@ def numIterator(q, number09):
     else:
         return
 
-#def readGroup(q):
+def readGroup(q, letter, upperCase, lowerCase, number29, number19, number09):
     #sålänge det finns ngt i kön och ingen ) har kommit forsätt, blir kön tom skriv sknad höger
     #om det kommer ( anropa read group) igen
     #Kommer en ) returna True
+    while q.peek() is not None:
+        if q.peek() == "(":
+            q.dequeue()
+            readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
+            return readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
+        if q.peek() == ")":
+            q.dequeue()
+            if q.peek():
+                return checkNumberAfterP(q, letter, upperCase, lowerCase, number29, number19, number09)
+            else:
+                return
+            #readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
+        elif upperCase.match(q.peek()):
+            return readMolInside(q, letter, upperCase, lowerCase, number29, number19, number09)
+    if q.isEmpty():
+        raise Syntaxfel("Saknad högerparentes" + qRest(q))
 
-
-def checkAtom(atom):
+def checkAtom(atom, q):
         if atom in atoms:
             return
         else:
-            raise Syntaxfel('Okänd atom')
+            q.dequeue()
+            raise Syntaxfel('Okänd atom' + qRest(q))
 
 
 def main2():
@@ -183,5 +239,31 @@ def main2():
             except TypeError as inst:
                 print(str(inst))
 
+def main():
+    #quitSign = '#'
+    #with open("sampleinput.txt", "r", encoding="utf-8") as sampleInput:
+    #a = sampleInput.readlines() # = sys.stdin: istället för = sampleInput.readlines()
+    a = sys.stdin
+    a2 = []
+    for b in a:
+        c = b[:(len(b)-1)]
+        if not c == "":
+            a2.append(c)
+    for molecule in a2:
+        molecule.strip()
+        if molecule == '#':
+            break
+        try:
+            try:
+                if readformel(molecule):
+                    print("Formeln är syntaktiskt korrekt")
+                else:
+                    raise Syntaxfel()
+            except Syntaxfel as inst:
+                print (str(inst))
+        except TypeError:
+            readformel(molecule)
+
+#Här körs programmet
 if __name__ == "__main__":
     main2()
