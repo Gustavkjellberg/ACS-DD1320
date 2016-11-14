@@ -2,6 +2,7 @@
 #Isak Hassbring  940204-1496
 import re
 import sys
+import unittest
 from array import array
 
 
@@ -232,6 +233,9 @@ realz = ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne', 'Na', 'Mg', 'Al',
 
 #Huvudfunktion
 
+class TestStringMethods(unittest.TestCase):
+    def test_okay(self):
+        self.assertEqual()
 
 def main2():
     quitSign = '#'

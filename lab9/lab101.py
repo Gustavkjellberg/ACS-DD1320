@@ -2,6 +2,7 @@
 #Isak Hassbring  940204-1496
 import re
 import sys
+import unittest
 from array import array
 
 
@@ -64,23 +65,10 @@ class Syntaxfel(Exception):
     pass
 atoms = ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne', 'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar', 'K', 'Ca', 'Sc', 'Ti', 'V', 'Cr', 'Mn', 'Fe', 'Co', 'Ni', 'Cu', 'Zn', 'Ga', 'Ge', 'As', 'Se', 'Br', 'Kr', 'Rb', 'Sr', 'Y', 'Zr', 'Nb', 'Mo', 'Tc', 'Ru', 'Rh', 'Pd', 'Ag', 'Cd', 'In', 'Sn', 'Sb', 'Te', 'I', 'Xe', 'Cs', 'Ba', 'La', 'Ce', 'Pr', 'Nd', 'Pm', 'Sm', 'Eu', 'Gd', 'Tb', 'Dy', 'Ho', 'Er', 'Tm', 'Yb', 'Lu', 'Hf', 'Ta', 'W', 'Re', 'Os', 'Ir', 'Pt', 'Au', 'Hg', 'Tl', 'Pb', 'Bi', 'Po', 'At', 'Rn', 'Fr', 'Ra', 'Ac', 'Th', 'Pa', 'U', 'Np', 'Pu', 'Am', 'Cm', 'Bk', 'Cf', 'Es', 'Fm', 'Md', 'No', 'Lr', 'Rf', 'Db', 'Sg', 'Bh', 'Hs', 'Mt', 'Ds', 'Rg', 'Cn', 'Fl', 'Lv']
 def qRest(q):
-    x = " vid radslutet "
+    x = ' vid radslutet '
     while not q.isEmpty():
         x = x + q.dequeue()
     return x
-
-
-#Rekursiv medåkning
-def initializer(molecule):
-    q = createQueue(molecule)
-    letter = re.compile('[A-Za-z]')
-    upperCase = re.compile('[A-Z]')
-    lowerCase = re.compile('[a-z]')
-    number29 = re.compile('[2-9]')
-    number19 = re.compile('[1-9]')
-    number09 = re.compile('[0-9]')
-    if readFormel(q, letter, upperCase, lowerCase, number29, number19, number09):
-        return True
 
 #Skapar kö
 def createQueue(molecule):
@@ -88,6 +76,28 @@ def createQueue(molecule):
     for part in molecule:
         q.enqueue(part)
     return q
+
+def checkAtom(atom, q):
+    if atom in atoms:
+        return
+    else:
+        q.dequeue()
+        raise Syntaxfel('Okänd atom' + qRest(q))
+
+
+def nextSignInside(q, letter, upperCase, lowerCase, number29, number19, number09):
+    if q.peek():
+        if number09.match(q.peek()):
+            checkNumber(q, letter, upperCase, lowerCase, number29, number19, number09)
+    return readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
+
+def nextSign(q, letter, upperCase, lowerCase, number29, number19, number09):
+    if q.peek():
+        if number09.match(q.peek()):
+            checkNumber(q, letter, upperCase, lowerCase, number29, number19, number09)
+        return readFormel(q, letter, upperCase, lowerCase, number29, number19, number09)
+    else:
+        return
 
 def readFormel(q, letter, upperCase, lowerCase, number29, number19, number09):
     #om det är en boktav
@@ -100,7 +110,7 @@ def readFormel(q, letter, upperCase, lowerCase, number29, number19, number09):
             readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
             readFormel(q, letter, upperCase, lowerCase, number29, number19, number09)
         else:
-            raise Syntaxfel("Felaktig gruppstart" + qRest(q))
+            raise Syntaxfel('Felaktig gruppstart' + qRest(q))
     return
 
 def readMol(q, letter, upperCase, lowerCase, number29, number19, number09):
@@ -139,19 +149,7 @@ def readMolInside(q, letter, upperCase, lowerCase, number29, number19, number09)
             return nextSignInside(q, letter, upperCase, lowerCase, number29, number19, number09)
 
 
-def nextSignInside(q, letter, upperCase, lowerCase, number29, number19, number09):
-    if q.peek():
-        if number09.match(q.peek()):
-            checkNumber(q, letter, upperCase, lowerCase, number29, number19, number09)
-    return readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
 
-def nextSign(q, letter, upperCase, lowerCase, number29, number19, number09):
-    if q.peek():
-        if number09.match(q.peek()):
-            checkNumber(q, letter, upperCase, lowerCase, number29, number19, number09)
-        return readFormel(q, letter, upperCase, lowerCase, number29, number19, number09)
-    else:
-        return
 
     #om siffra kolla att den är stor nog
 
@@ -195,7 +193,7 @@ def readGroup(q, letter, upperCase, lowerCase, number29, number19, number09):
             q.dequeue()
             readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
             return readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
-        if q.peek() == ")":
+        elif q.peek() == ")":
             q.dequeue()
             if q.peek():
                 return checkNumberAfterP(q, letter, upperCase, lowerCase, number29, number19, number09)
@@ -207,13 +205,38 @@ def readGroup(q, letter, upperCase, lowerCase, number29, number19, number09):
     if q.isEmpty():
         raise Syntaxfel("Saknad högerparentes" + qRest(q))
 
-def checkAtom(atom, q):
-        if atom in atoms:
-            return
-        else:
-            q.dequeue()
-            raise Syntaxfel('Okänd atom' + qRest(q))
 
+
+#Rekursiv medåkning
+def initializer(molecule):
+    # type: (object) -> object
+    q = createQueue(molecule)
+    letter = re.compile('[A-Za-z]')
+    upperCase = re.compile('[A-Z]')
+    lowerCase = re.compile('[a-z]')
+    number29 = re.compile('[2-9]')
+    number19 = re.compile('[1-9]')
+    number09 = re.compile('[0-9]')
+    if readFormel(q, letter, upperCase, lowerCase, number29, number19, number09):
+        return True
+
+
+
+class TestStringMethods(unittest.TestCase):
+    def test_main(self):
+        inp = "Na"
+        #self.assertEqual(main3("Na"), "print")
+        self.assertEqual(main3(inp), "hej")
+
+
+
+
+def main3(inp):
+    try:
+        initializer(inp)
+        print("Formeln är syntaktiskt korrekt")
+    except(Syntaxfel) as inst:
+        print (inst)
 
 def main2():
     quitSign = '#'
@@ -229,15 +252,13 @@ def main2():
             if molecule == quitSign:
                 break
             try:
-                try:
-                    initializer(molecule)
-                    print("Formeln är syntaktiskt korrekt")
-                    #else:
-                    #   raise Syntaxfel()
-                except Syntaxfel as inst:
-                    print (str(inst))
-            except TypeError as inst:
-                print(str(inst))
+                initializer(molecule)
+                print("Formeln är syntaktiskt korrekt")
+                #else:
+                #   raise Syntaxfel()
+            except Syntaxfel as inst:
+                print (str(inst))
+
 
 def main():
     #quitSign = '#'
@@ -254,16 +275,13 @@ def main():
         if molecule == '#':
             break
         try:
-            try:
-                if readformel(molecule):
-                    print("Formeln är syntaktiskt korrekt")
-                else:
-                    raise Syntaxfel()
-            except Syntaxfel as inst:
-                print (str(inst))
-        except TypeError:
-            readformel(molecule)
+            initializer(molecule)
+            print("Formeln är syntaktiskt korrekt")
+        except Syntaxfel as inst:
+            print (str(inst))
+
 
 #Här körs programmet
 if __name__ == "__main__":
-    main2()
+    #main2()
+    unittest.main()

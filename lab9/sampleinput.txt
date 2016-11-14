@@ -1,7 +1,9 @@
-(Na)
+Na
 H2O
 Si(C3(COOH)2)4(H2O)7
 Na332
+Na2Cl3H
+H10003
 C(Xx4)5
 C(OH4)C
 C(OH4C
