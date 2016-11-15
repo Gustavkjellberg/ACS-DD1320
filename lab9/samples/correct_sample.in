@@ -3,3 +3,432 @@ H2O
 Si(C3(COOH)2)4(H2O)7
 Na332
 #
+
+
+
+#Gustav Kjellberg 951028-2578
+#Isak Hassbring  940204-1496
+import re
+import sys
+import unittest
+from molgrafik import *
+from array import array
+
+
+class ParentNode:
+    def __init__(self, word, parent = None):
+        self.word = word
+        self.parent = parent
+    def getParent(self):
+        return self.parent
+    def getWord(self):
+        return self.word
+
+
+class Node(object):
+    def __init__(self, num, nextNode=None):
+        self.__num = num
+        self.nextNode = nextNode
+    #self.__prev = None
+    #return self.__num
+
+    def getNum(self):
+        return str(self.__num)
+    def __str__(self):
+        return str(self.__num)
+
+#Skapar en queue.
+class LinkedQ:
+    def __init__(self):
+        self.first = None
+        self.last = self.first
+        self.length = 0
+
+    def enqueue(self, num):
+        newNode = Node(num)
+        if self.first is None:
+            self.first = newNode
+            self.last = newNode
+        else:
+            self.last.nextNode = newNode
+            self.last = newNode
+        self.length += 1
+
+    def dequeue(self):
+        if self.first:
+            out = self.first.getNum()
+            self.first = self.first.nextNode
+            self.length -= 1
+            return out
+    def peek(self):
+        # type: () -> object
+        if not self.isEmpty():
+            return self.first.getNum()
+        else:
+            return None
+    def isEmpty(self):
+        return self.length == 0
+
+
+class Syntaxfel(Exception):
+    pass
+
+
+
+def qRest(q):
+    x = ' vid radslutet'
+    if not q.isEmpty():
+        x = x + ' '
+    while not q.isEmpty():
+        x = x + q.dequeue()
+    return x
+
+#Skapar kö
+def createQueue(molecule):
+    q = LinkedQ()
+    for part in molecule:
+        q.enqueue(part)
+    return q
+
+def checkAtom(atom, q):
+    atoms = ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne', 'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar', 'K', 'Ca', 'Sc', 'Ti', 'V', 'Cr', 'Mn', 'Fe', 'Co', 'Ni', 'Cu', 'Zn', 'Ga', 'Ge', 'As', 'Se', 'Br', 'Kr', 'Rb', 'Sr', 'Y', 'Zr', 'Nb', 'Mo', 'Tc', 'Ru', 'Rh', 'Pd', 'Ag', 'Cd', 'In', 'Sn', 'Sb', 'Te', 'I', 'Xe', 'Cs', 'Ba', 'La', 'Ce', 'Pr', 'Nd', 'Pm', 'Sm', 'Eu', 'Gd', 'Tb', 'Dy', 'Ho', 'Er', 'Tm', 'Yb', 'Lu', 'Hf', 'Ta', 'W', 'Re', 'Os', 'Ir', 'Pt', 'Au', 'Hg', 'Tl', 'Pb', 'Bi', 'Po', 'At', 'Rn', 'Fr', 'Ra', 'Ac', 'Th', 'Pa', 'U', 'Np', 'Pu', 'Am', 'Cm', 'Bk', 'Cf', 'Es', 'Fm', 'Md', 'No', 'Lr', 'Rf', 'Db', 'Sg', 'Bh', 'Hs', 'Mt', 'Ds', 'Rg', 'Cn', 'Fl', 'Lv']
+    if atom in atoms:
+        return
+    else:
+        raise Syntaxfel('Okänd atom' + qRest(q))
+
+
+def checkNumber(q, letter, upperCase, lowerCase, number29, number19, number09):
+    num = q.dequeue()
+    print(num)
+    if number19.match(num):
+        if q.peek():
+            if number09.match(q.peek()):
+                num =  numIterator(q, number09, num)
+                return num
+            else:
+                if number29.match(num):
+                    return num
+        else:
+            if number29.match(num):
+                return num
+    raise Syntaxfel("För litet tal" + qRest(q))
+
+def nextSignInside(q, letter, upperCase, lowerCase, number29, number19, number09):
+    if q.peek():
+        if number09.match(q.peek()):
+            num = checkNumber(q, letter, upperCase, lowerCase, number29, number19, number09)
+            return num
+    return readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
+    #return
+
+def nextSign(q, letter, upperCase, lowerCase, number29, number19, number09):
+    if q.peek():
+        if number09.match(q.peek()):
+            num = checkNumber(q, letter, upperCase, lowerCase, number29, number19, number09)
+            print(num)
+            return num
+        #return readFormel(q, letter, upperCase, lowerCase, number29, number19, number09)
+    else:
+        return None
+
+def readFormel(q, letter, upperCase, lowerCase, number29, number19, number09):
+    #om det är en boktav
+    ruta = Ruta()
+    if q.peek():
+        if letter.match(q.peek()):
+            x, y = readMol(q, letter, upperCase, lowerCase, number29, number19, number09)
+            print(x + "hejhejehej")
+            ruta.atom = x
+            if y:
+                ruta.num = int(y)
+            if q.peek() == None:
+                print("IDIOT")
+                return ruta
+            ruta.next = readFormel(q, letter, upperCase, lowerCase, number29, number19, number09)
+        elif q.peek() == ')':
+            print('SOSSE')
+
+        elif q.peek() == '(':
+            openingP = q.dequeue()
+            if q.peek() == ')':
+                #return readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
+                readFormel(q, letter, upperCase, lowerCase, number29, number19, number09)
+            else:
+                ruta.down, numP = readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
+                if numP:
+                    ruta.num = int(numP)
+                if q.peek():
+                    print("sista")
+                    ruta.next = readFormel(q, letter, upperCase, lowerCase, number29, number19, number09)
+                print(ruta.atom+ "hejsans")
+                return ruta
+        else:
+            raise Syntaxfel('Felaktig gruppstart' + qRest(q))
+    return ruta
+
+def readMol(q, letter, upperCase, lowerCase, number29, number19, number09):
+    if upperCase.match(q.peek()):
+        firstLetter = q.dequeue()
+        print(firstLetter+"huasdi")
+        if q.peek():
+            if letter.match(q.peek()):
+                if lowerCase.match(q.peek()):
+                    sndLetter = q.dequeue()
+                    checkAtom(firstLetter + sndLetter, q)
+
+                    y = nextSign(q, letter, upperCase, lowerCase, number29, number19, number09)
+                    return firstLetter+sndLetter, y
+            checkAtom(firstLetter, q)
+            y = nextSign(q, letter, upperCase, lowerCase, number29, number19, number09)
+            return firstLetter, y
+        else:
+            checkAtom(firstLetter, q)
+            #readFormel(q, letter, upperCase, lowerCase, number29, number19, number09)
+            print(firstLetter)
+            return firstLetter, None
+    else:
+        raise Syntaxfel('Saknad stor bokstav' + qRest(q))
+
+
+def readMolInside(q, letter, upperCase, lowerCase, number29, number19, number09):
+    if upperCase.match(q.peek()):
+        firstLetter = q.dequeue()
+        if q.peek():
+            if letter.match(q.peek()):
+                if lowerCase.match(q.peek()):
+                    sndLetter = q.dequeue()
+                    checkAtom(firstLetter + sndLetter, q)
+                    mol = firstLetter+ sndLetter
+                    if q.peek():
+                        if number09.match(q.peek()):
+                            y = checkNumber(q, letter, upperCase, lowerCase, number29, number19, number09)
+                        else:
+                            y = None
+                    else:
+                        y = None
+                    #y = nextSignInside(q, letter, upperCase, lowerCase, number29, number19, number09)
+                    return mol, y
+            checkAtom(firstLetter, q)
+            #y = nextSignInside(q, letter, upperCase, lowerCase, number29, number19, number09)
+            if number09.match(q.peek()):
+                y = checkNumber(q, letter, upperCase, lowerCase, number29, number19, number09)
+            else:
+                y = None
+            return firstLetter, y
+        else:
+            checkAtom(firstLetter, q)
+            if number09.match(q.peek()):
+                y = checkNumber(q, letter, upperCase, lowerCase, number29, number19, number09)
+            else:
+                y = None
+            #y = nextSignInside(q, letter, upperCase, lowerCase, number29, number19, number09)
+            return firstLetter, y
+    else:
+        raise Syntaxfel('Saknad stor bokstav' + qRest(q))
+
+
+
+
+
+def numIterator(q, number09, num):
+    if q.peek():
+
+        if number09.match(q.peek()):
+            num += q.dequeue()
+            numIterator(q, number09, num)
+    return num
+
+
+        #om siffra kolla att den är stor nog
+
+
+
+
+def checkNumberAfterP(q, letter, upperCase, lowerCase, number29, number19, number09):
+    if q.peek():
+        if number09.match(q.peek()):
+            return checkNumber(q, letter, upperCase, lowerCase, number29, number19, number09)
+    raise Syntaxfel('Saknad siffra' + qRest(q))
+
+def readGroup(q, letter, upperCase, lowerCase, number29, number19, number09):
+    #sålänge det finns ngt i kön och ingen ) har kommit forsätt, blir kön tom skriv sknad höger
+    #om det kommer ( anropa read group) igen
+    #Kommer en ) returna True
+    ruta= Ruta()
+    while q.peek() is not None:
+        print(q.peek() + "   Inne i readgroup")
+        if q.peek() == "(":
+            q.dequeue()
+            if upperCase.match(q.peek()):
+                #readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
+                ruta.down, num = readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
+
+                if num:
+                    ruta.num = int(num)
+                readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
+                return ruta, num
+            else:
+                if q.peek() == ')':
+                    num = checkNumberAfterP(q, letter, upperCase, lowerCase, number29, number19, number09)
+                    return ruta, num
+                else:
+                    ruta.next = readFormel(q, letter, upperCase, lowerCase, number29, number19, number09)
+        elif q.peek() == ")":
+
+            q.dequeue()
+            #if q.peek():
+            #return checkNumberAfterP(q, letter, upperCase, lowerCase, number29, number19, number09)
+            num =  checkNumberAfterP(q, letter, upperCase, lowerCase, number29, number19, number09)
+            print(num+ "-----")
+            return ruta, num
+
+            #else:
+            #   return
+            #readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
+        #elif upperCase.match(q.peek()):
+        else:
+            mol, num = readMolInside(q, letter, upperCase, lowerCase, number29, number19, number09)
+            ruta.atom = mol
+            if num:
+                ruta.num = int(num)
+
+            if q.peek():
+
+                if not q.peek() == ")":
+                    ruta.next, num = readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
+                    print(q.peek())
+                    print(num + "ÄÄÄ")
+
+                    return ruta, num
+#                if letter.match(q.peek()):
+ #                   ruta.next, num = readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
+  #                  return ruta, num
+   #             elif q.peek() == "(":
+    #                q.dequeue()
+     #               ruta.down, num = readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
+                else:
+                    mol, num = readGroup(q, letter, upperCase, lowerCase, number29, number19, number09)
+            return ruta, num
+
+
+    if q.isEmpty():
+        raise Syntaxfel("Saknad högerparentes" + qRest(q))
+
+
+
+#Rekursiv medåkning
+def initializer(molecule):
+    # type: (object) -> object
+    q = createQueue(molecule)
+    letter = re.compile('[A-Za-z]')
+    upperCase = re.compile('[A-Z]')
+    lowerCase = re.compile('[a-z]')
+    number29 = re.compile('[2-9]')
+    number19 = re.compile('[1-9]')
+    number09 = re.compile('[0-9]')
+    return readFormel(q, letter, upperCase, lowerCase, number29, number19, number09)
+
+
+
+class TestMethods(unittest.TestCase):
+    def test_main3(self):
+        self.assertEqual(main3('Na'), 'Formeln är syntaktiskt korrekt')
+        self.assertEqual(main3('H2O'), 'Formeln är syntaktiskt korrekt')
+        self.assertEqual(main3('Si(C3(COOH)2)4(H2O)7'), 'Formeln är syntaktiskt korrekt')
+        self.assertEqual(main3('Na332'), 'Formeln är syntaktiskt korrekt')
+        self.assertEqual(main3('C(Xx4)5'), 'Okänd atom vid radslutet 4)5')
+        self.assertEqual(main3('C(OH4)C'), 'Saknad siffra vid radslutet C')
+        self.assertEqual(main3('C(OH4C'), 'Saknad högerparentes vid radslutet')
+        self.assertEqual(main3('H2O)Fe'), 'Felaktig gruppstart vid radslutet )Fe')
+        self.assertEqual(main3('H0'), 'För litet tal vid radslutet')
+        self.assertEqual(main3('H1C'), 'För litet tal vid radslutet C')
+        self.assertEqual(main3('H02C'), 'För litet tal vid radslutet 2C')
+        self.assertEqual(main3('Nacl'), 'Saknad stor bokstav vid radslutet cl')
+        self.assertEqual(main3('a'), 'Saknad stor bokstav vid radslutet a')
+        self.assertEqual(main3('(Cl)2)3'), 'Felaktig gruppstart vid radslutet )3')
+        self.assertEqual(main3(')'), 'Felaktig gruppstart vid radslutet )')
+        self.assertEqual(main3('2'), 'Felaktig gruppstart vid radslutet 2')
+
+
+
+def main3(molecule):
+
+    try:
+        x = initializer(molecule)
+        print("Formeln är syntaktiskt korrekt")
+        return x
+
+    except Syntaxfel as inst:
+        return (str(inst))
+
+def main2():
+    quitSign = '#'
+    with open("sampleinput.txt", "r", encoding="utf-8") as sampleInput:
+        a = sampleInput.readlines() # = sys.stdin: istället för = sampleInput.readlines()
+        a2 = []
+        for b in a:
+            c = b[:(len(b)-1)]
+            if not c == "":
+                a2.append(str(c))
+        for molecule in a2:
+            molecule.strip()
+            if molecule == quitSign:
+                break
+            try:
+                initializer(molecule)
+                print("Formeln är syntaktiskt korrekt")
+                #else:
+                #   raise Syntaxfel()
+            except Syntaxfel as inst:
+                print (str(inst))
+
+
+def main():
+    #quitSign = '#'
+    #with open("sampleinput.txt", "r", encoding="utf-8") as sampleInput:
+    #a = sampleInput.readlines() # = sys.stdin: istället för = sampleInput.readlines()
+    a = sys.stdin
+    a2 = []
+    for b in a:
+        c = b[:(len(b)-1)]
+        if not c == "":
+            a2.append(c)
+    for molecule in a2:
+        molecule.strip()
+        if molecule == '#':
+            break
+        try:
+            initializer(molecule)
+            print("Formeln är syntaktiskt korrekt")
+        except Syntaxfel as inst:
+            print (str(inst))
+
+
+#Här körs programmet
+if __name__ == "__main__":
+    #i = 1
+    ruta = main3('Si(C3(COOH)2)4(H2O)7')
+    #parser = main3("Na")
+    mg = Molgrafik()
+    mg.show(ruta)
+
+
+        #nextRuta = ruta.next
+        #nextRuta = Ruta(elem)
+        #ruta = nextRuta
+
+
+
+    #rutan2 = Ruta()
+    #rutan2.name = "hej"
+
+
+    #ruta.next = Ruta(rutan2)
+
+
+    hej = input("Hejsan")
+
+
+
+    #unittest.main()
